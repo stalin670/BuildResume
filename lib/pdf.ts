@@ -5,8 +5,7 @@ let workerSrcSet = false;
 async function ensurePdfjs() {
   const pdfjs = await import('pdfjs-dist');
   if (!workerSrcSet) {
-    const worker = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
-    pdfjs.GlobalWorkerOptions.workerSrc = worker;
+    pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
     workerSrcSet = true;
   }
   return pdfjs;
