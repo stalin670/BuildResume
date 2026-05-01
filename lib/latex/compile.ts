@@ -1,43 +1,28 @@
 'use client';
 
-type EngineLike = {
-  loadEngine: () => Promise<void>;
-  writeMemFSFile: (name: string, content: string) => void;
-  setEngineMainFile: (name: string) => void;
-  compileLaTeX: () => Promise<{ pdf: Uint8Array; log: string; status: number }>;
-  flushCache: () => void;
-};
-
-let cached: EngineLike | null = null;
-
-async function getEngine(): Promise<EngineLike> {
-  if (cached) return cached;
-  await new Promise<void>((resolve, reject) => {
-    if ((window as unknown as { PdfTeXEngine?: unknown }).PdfTeXEngine) return resolve();
-    const s = document.createElement('script');
-    s.src = '/swiftlatex/PdfTeXEngine.js';
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error('Failed to load SwiftLaTeX engine script'));
-    document.head.appendChild(s);
-  });
-  const Ctor = (window as unknown as { PdfTeXEngine: new () => EngineLike }).PdfTeXEngine;
-  const engine = new Ctor();
-  await engine.loadEngine();
-  cached = engine;
-  return engine;
-}
-
 export type CompileResult = { pdf: Blob | null; log: string; status: number };
 
 export async function compileTex(tex: string): Promise<CompileResult> {
-  const engine = await getEngine();
-  engine.flushCache();
-  engine.writeMemFSFile('main.tex', tex);
-  engine.setEngineMainFile('main.tex');
-  const r = await engine.compileLaTeX();
-  return {
-    pdf: r.status === 0 ? new Blob([r.pdf as unknown as ArrayBuffer], { type: 'application/pdf' }) : null,
-    log: r.log,
-    status: r.status
-  };
+  try {
+    const res = await fetch('/api/compile', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tex })
+    });
+    const ct = res.headers.get('content-type') ?? '';
+    if (res.ok && ct.includes('pdf')) {
+      const buf = await res.arrayBuffer();
+      return { pdf: new Blob([buf], { type: 'application/pdf' }), log: '', status: 0 };
+    }
+    let log = '';
+    try {
+      const j = await res.json();
+      log = j.log ?? j.error ?? `HTTP ${res.status}`;
+    } catch {
+      log = `HTTP ${res.status}`;
+    }
+    return { pdf: null, log, status: res.status || 1 };
+  } catch (e) {
+    return { pdf: null, log: `Compile request failed: ${(e as Error).message}`, status: -1 };
+  }
 }
