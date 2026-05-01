@@ -1,0 +1,55 @@
+{
+  "header": {
+    "name": "Amit Yadav",
+    "email": "ydamit5840@gmail.com",
+    "phone": "+91-9897518539",
+    "portfolio": "https://portfolio-smoky-zeta-80.vercel.app/",
+    "github": "https://github.com/stalin670"
+  },
+  "experience": [
+    {
+      "company": "TExam",
+      "location": "Remote",
+      "role": "Backend Developer Intern",
+      "dates": "Dec 2022 - Jan 2023",
+      "bullets": [
+        { "title": "Real-Time Chat Interface",
+          "detail": "Built WebSocket-based chat enabling low-latency communication." },
+        { "title": "RESTful API Development",
+          "detail": "Designed secure REST APIs for user management and data handling." }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Intervu",
+      "url": "https://intervu-three.vercel.app/",
+      "tagline": "An Interview Platform",
+      "description": "Video calls, live code editor, screen recording for technical interviews.",
+      "tech": "Next.js, React, Tailwind, Convex, Clerk"
+    }
+  ],
+  "skills": {
+    "languages": "Python, C/C++, JavaScript, TypeScript, Java",
+    "frameworks": "ReactJS, NodeJS, ExpressJS",
+    "tools": "Git, GitHub, MySQL, MongoDB, Firebase",
+    "soft": "Leadership, Public Speaking, Time Management"
+  },
+  "achievements": [
+    { "title": "Competitive Programming",
+      "url": "",
+      "detail": "Expert @Codeforces (1750 max), 5* @CodeChef (2090 max)." }
+  ],
+  "coursework": [
+    { "title": "Core Subjects",
+      "detail": "DSA, Computer Networks, OS, DBMS, OOP." }
+  ],
+  "education": [
+    {
+      "school": "Galgotias University",
+      "location": "Noida, India",
+      "degree": "BS - Computer Science; GPA: 9.23",
+      "dates": "July 2022 - June 2025"
+    }
+  ]
+}
