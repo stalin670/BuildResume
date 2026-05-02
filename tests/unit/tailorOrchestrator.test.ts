@@ -21,8 +21,9 @@ describe('runTailor orchestrator', () => {
       { gemini: fake, emit: (e) => events.push(e) }
     );
     const stepOrder = events.filter(e => e.type === 'step' && e.status === 'done').map(e => (e as any).id);
-    expect(stepOrder).toEqual(['parse', 'analyze-jd', 'extract', 'tailor', 'render']);
+    expect(stepOrder).toEqual(['parse', 'analyze-jd', 'extract', 'tailor', 'merge-skills', 'render']);
     expect(events.find(e => e.type === 'final')).toBeTruthy();
+    expect(events.find(e => e.type === 'diff')).toBeTruthy();
   });
 
   it('emits error event when a step throws', async () => {

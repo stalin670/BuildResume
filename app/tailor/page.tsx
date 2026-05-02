@@ -4,6 +4,7 @@ import { InputPanel } from '@/components/InputPanel';
 import { PipelineView } from '@/components/PipelineView';
 import { ResumePreview } from '@/components/ResumePreview';
 import { ActionBar } from '@/components/ActionBar';
+import { DiffSummary } from '@/components/DiffSummary';
 import { useGenerate } from '@/lib/useGenerate';
 import { compileTex } from '@/lib/latex/compile';
 import Link from 'next/link';
@@ -40,6 +41,11 @@ export default function TailorPage() {
       ) : (
         <>
           <PipelineView events={state.events} />
+          {state.diff && (
+            <div className="mx-auto max-w-3xl px-6 pb-2">
+              <DiffSummary diff={state.diff} />
+            </div>
+          )}
           {state.error && (
             <div className="mx-auto max-w-3xl px-6 pb-4 text-sm text-red-400">
               Error: {state.error}

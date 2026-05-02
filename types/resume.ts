@@ -83,9 +83,18 @@ export type Score = {
 
 export type PipelineStepStatus = 'pending' | 'running' | 'done' | 'error';
 
+export type TailorDiff = {
+  addedSkills: { languages: string[]; frameworks: string[]; tools: string[] };
+  skippedSkills: string[];
+  rewrittenBullets: number;
+  reorderedExperience: boolean;
+  reorderedProjects: boolean;
+};
+
 export type PipelineEvent =
   | { type: 'step'; id: string; status: PipelineStepStatus; label: string;
       durationMs?: number; payload?: unknown }
+  | { type: 'diff'; diff: TailorDiff }
   | { type: 'final'; tex: string; before?: Score; after?: Score }
   | { type: 'error'; stepId: string; message: string };
 

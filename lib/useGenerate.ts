@@ -1,13 +1,14 @@
 'use client';
 import { useState, useCallback } from 'react';
 import { parseSSE } from '@/lib/sse';
-import type { GenerateRequest, PipelineEvent, Score } from '@/types/resume';
+import type { GenerateRequest, PipelineEvent, Score, TailorDiff } from '@/types/resume';
 
 export type GenerateState = {
   events: PipelineEvent[];
   tex: string | null;
   before?: Score;
   after?: Score;
+  diff?: TailorDiff;
   error: string | null;
   running: boolean;
 };
@@ -47,6 +48,8 @@ export function useGenerate() {
       for (const ev of events) {
         if (ev.type === 'final') {
           acc = { ...acc, tex: ev.tex, before: ev.before, after: ev.after };
+        } else if (ev.type === 'diff') {
+          acc = { ...acc, diff: ev.diff };
         } else if (ev.type === 'error') {
           acc = { ...acc, error: ev.message };
         } else {
